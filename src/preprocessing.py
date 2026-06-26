@@ -1,7 +1,11 @@
 import pandas as pd
 import numpy as np
-from src import config
-from src.data_loader import load_raw_data
+try:
+    from src import config
+    from src.data_loader import load_raw_data
+except ModuleNotFoundError:
+    import config
+    from data_loader import load_raw_data
 
 def clean_data():
     """Performs the full data cleaning process for the Walmart dataset."""

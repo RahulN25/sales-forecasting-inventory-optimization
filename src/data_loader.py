@@ -1,5 +1,8 @@
 import pandas as pd
-from src import config
+try:
+    from src import config
+except ModuleNotFoundError:
+    import config
 
 def load_raw_data():
     """Loads raw dataframes from the specified directory."""
