@@ -41,3 +41,67 @@ def create_holiday_details(df):
     return df
 
 
+def create_lag_features(df, lags=[1, 2, 3, 4, 8, 12, 26, 52]):
+    """
+    Computes weekly sales lag features.
+    Lags are computed grouped by Store and Dept to keep time series separate.
+    """
+    df = df.copy()
+    df = df.sort_values(by=['Store', 'Dept', 'Date']).reset_index(drop=True)
+    
+    for lag in lags:
+        df[f'Weekly_Sales_lag_{lag}'] = df.groupby(['Store', 'Dept'])['Weekly_Sales'].shift(lag)
+        
+    return df
+
+
+def create_rolling_features(df):
+    """
+    Computes rolling mean and standard deviation on 1-week shifted sales.
+    Rolling calculations are grouped by Store and Dept to avoid data leakage.
+    """
+    df = df.copy()
+    df = df.sort_values(by=["Store", "Dept", "Date"]).reset_index(drop=True)
+
+    group_cols = ["Store", "Dept"]
+
+    for w in [4, 12, 26, 52]:
+        df[f"rolling_mean_{w}"] = (
+            df.groupby(group_cols)["Weekly_Sales"]
+            .transform(lambda x: x.shift(1).rolling(window=w, min_periods=1).mean())
+        )
+
+    for w in [4, 12, 52]:
+        df[f"rolling_std_{w}"] = (
+            df.groupby(group_cols)["Weekly_Sales"]
+            .transform(lambda x: x.shift(1).rolling(window=w, min_periods=2).std())
+            .fillna(0.0)
+        )
+
+    return df
+
+
+def create_markdown_features(df):
+    """
+    Aggregates markdown statistics.
+    Computes total sum, has_markdown flag, average, and maximum of active markdowns.
+    """
+    df = df.copy()
+    
+    markdown_cols = ['MarkDown1', 'MarkDown2', 'MarkDown3', 'MarkDown4', 'MarkDown5']
+    md_present = [col for col in markdown_cols if col in df.columns]
+    
+    if md_present:
+        df['MarkDown_Total'] = df[md_present].sum(axis=1)
+        df['Has_MarkDown'] = (df['MarkDown_Total'] > 0).astype(int)
+        df['MarkDown_Avg'] = df[md_present].mean(axis=1)
+        df['MarkDown_Max'] = df[md_present].max(axis=1)
+    else:
+        df['MarkDown_Total'] = 0.0
+        df['Has_MarkDown'] = 0
+        df['MarkDown_Avg'] = 0.0
+        df['MarkDown_Max'] = 0.0
+        
+    return df
+
+
