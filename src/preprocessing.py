@@ -87,6 +87,10 @@ def clean_data():
     print("Missing values after cleaning:")
     print(train_cleaned.isnull().sum())
 
+    print("Correcting negative sales values...")
+    train_cleaned["Weekly_Sales_Original"] = train_cleaned["Weekly_Sales"]
+    train_cleaned["Weekly_Sales"] = train_cleaned["Weekly_Sales"].clip(lower=0)
+
     print("Saving cleaned datasets...")
     Path(config.TRAIN_CLEANED_PATH).parent.mkdir(parents=True, exist_ok=True)
     Path(config.TEST_CLEANED_PATH).parent.mkdir(parents=True, exist_ok=True)

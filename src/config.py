@@ -21,3 +21,7 @@ FEATURES_RAW_PATH = DATA_RAW_DIR / "features.csv"
 # Output Files
 TRAIN_CLEANED_PATH = DATA_PROCESSED_DIR / "train_cleaned.csv"
 TEST_CLEANED_PATH = DATA_PROCESSED_DIR / "test_cleaned.csv"
+
+# Engineered Features Paths
+TRAIN_FEATURES_PATH = DATA_PROCESSED_DIR / "train_features.csv"
+TEST_FEATURES_PATH = DATA_PROCESSED_DIR / "test_features.csv"
