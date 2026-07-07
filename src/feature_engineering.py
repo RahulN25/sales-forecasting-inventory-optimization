@@ -105,3 +105,81 @@ def create_markdown_features(df):
     return df
 
 
+def create_historical_averages(df, train_part):
+    """
+    Computes store-level, department-level, and store-department-level historical average sales.
+    Computed using only train_part to avoid leakage from the test target.
+    """
+    df = df.copy()
+    
+    # Store average sales
+    store_avg = train_part.groupby('Store')['Weekly_Sales'].mean().to_dict()
+    df['Store_Avg_Sales'] = df['Store'].map(store_avg)
+    
+    # Department average sales
+    dept_avg = train_part.groupby('Dept')['Weekly_Sales'].mean().to_dict()
+    df['Dept_Avg_Sales'] = df['Dept'].map(dept_avg)
+    
+    # Store-Department average sales
+    store_dept_avg = train_part.groupby(['Store', 'Dept'])['Weekly_Sales'].mean().reset_index()
+    store_dept_avg = store_dept_avg.rename(columns={'Weekly_Sales': 'Store_Dept_Avg_Sales'})
+    df = df.merge(store_dept_avg, on=['Store', 'Dept'], how='left')
+    
+    # Fallbacks in case test has unseen stores/departments
+    df['Store_Avg_Sales'] = df['Store_Avg_Sales'].fillna(train_part['Weekly_Sales'].mean())
+    df['Dept_Avg_Sales'] = df['Dept_Avg_Sales'].fillna(train_part['Weekly_Sales'].mean())
+    df['Store_Dept_Avg_Sales'] = df['Store_Dept_Avg_Sales'].fillna(df['Store_Avg_Sales'])
+    
+    return df
+
+
+def create_interaction_features(df):
+    """
+    Constructs interaction features between categorical, numerical, and economic flags.
+    """
+    df = df.copy()
+
+    # Safely convert IsHoliday to integer flag
+    if df["IsHoliday"].dtype == bool:
+        holiday_flag = df["IsHoliday"].astype(int)
+    else:
+        holiday_flag = (
+            df["IsHoliday"]
+            .astype(str)
+            .str.strip()
+            .str.lower()
+            .map({"true": 1, "false": 0, "1": 1, "0": 0})
+            .fillna(0)
+            .astype(int)
+        )
+
+    df["Holiday_MarkDown"] = holiday_flag * df["Has_MarkDown"]
+    df["Q4_Holiday"] = df["Is_Q4"] * holiday_flag
+    df["Size_MarkDown"] = df["Size"] * df["MarkDown_Total"]
+
+    return df
+
+
+def build_features_pipeline(df):
+    """
+    Consolidated function to apply all feature engineering steps in sequence.
+    """
+    df = df.sort_values(by=['Store', 'Dept', 'Date']).reset_index(drop=True)
+    
+    # Identify training records to calculate historical averages without target leakage
+    train_part = df[df['Weekly_Sales'].notnull()]
+    
+    df = create_date_features(df)
+    df = create_holiday_details(df)
+    df = create_markdown_features(df)
+    df = create_lag_features(df)
+    df = create_rolling_features(df)
+    df = create_historical_averages(df, train_part)
+    
+    # Store Type categorical label encoding
+    if 'Type' in df.columns:
+        df['Type_Encoded'] = df['Type'].map({'A': 1, 'B': 2, 'C': 3})
+        
+    df = create_interaction_features(df)
+        
+    return df
