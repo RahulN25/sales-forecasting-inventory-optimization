@@ -499,19 +499,98 @@ def get_xgb_forecast(train_features, val_features, feature_cols, target_col="Wee
     return model.predict(X_val)
 
 
-def get_lgb_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", n_estimators=100, max_depth=6, learning_rate=0.1, random_state=42):
-    """
-    LightGBM Regressor Forecast.
-    """
+def get_lgb_forecast(
+    train_features,
+    val_features,
+    feature_cols,
+    target_col="Weekly_Sales",
+    n_estimators=500,
+    max_depth=-1,
+    learning_rate=0.05,
+    random_state=42
+):
+    import gc
+    import numpy as np
+    import pandas as pd
     from lightgbm import LGBMRegressor
-    
-    X_train = train_features[feature_cols]
-    y_train = train_features[target_col]
-    X_val = val_features[feature_cols]
-    
-    model = LGBMRegressor(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate, random_state=random_state, n_jobs=-1)
+
+    # Select required data
+    X_train_df = train_features[feature_cols].copy()
+    y_train_series = train_features[target_col].copy()
+    X_val_df = val_features[feature_cols].copy()
+
+    # Convert all feature columns to numeric
+    X_train_df = X_train_df.apply(pd.to_numeric, errors="coerce")
+    X_val_df = X_val_df.apply(pd.to_numeric, errors="coerce")
+    y_train_series = pd.to_numeric(y_train_series, errors="coerce")
+
+    # Keep only rows with valid target values
+    valid_target = y_train_series.notna() & np.isfinite(y_train_series)
+
+    X_train_df = X_train_df.loc[valid_target]
+    y_train_series = y_train_series.loc[valid_target]
+
+    # Replace invalid feature values
+    X_train_df = X_train_df.replace([np.inf, -np.inf], np.nan).fillna(0)
+    X_val_df = X_val_df.replace([np.inf, -np.inf], np.nan).fillna(0)
+
+    # Convert to contiguous NumPy arrays
+    X_train = np.ascontiguousarray(
+        X_train_df.to_numpy(dtype=np.float32)
+    )
+
+    y_train = np.ascontiguousarray(
+        y_train_series.to_numpy(dtype=np.float32).reshape(-1)
+    )
+
+    X_val = np.ascontiguousarray(
+        X_val_df.to_numpy(dtype=np.float32)
+    )
+
+    print("LightGBM diagnostic information")
+    print("X_train:", X_train.shape, X_train.dtype)
+    print("y_train:", y_train.shape, y_train.dtype)
+    print("X_val:", X_val.shape, X_val.dtype)
+    print("Target NaN:", np.isnan(y_train).sum())
+    print("Target infinity:", np.isinf(y_train).sum())
+    print("Feature NaN:", np.isnan(X_train).sum())
+    print("Feature infinity:", np.isinf(X_train).sum())
+    print("Contiguous X:", X_train.flags["C_CONTIGUOUS"])
+    print("Contiguous y:", y_train.flags["C_CONTIGUOUS"])
+
+    if len(X_train) != len(y_train):
+        raise ValueError(
+            f"Feature and target lengths differ: "
+            f"{len(X_train)} != {len(y_train)}"
+        )
+
+    if len(y_train) == 0:
+        raise ValueError("No valid target rows remain after cleaning.")
+
+    model = LGBMRegressor(
+        objective="regression_l1",
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        learning_rate=learning_rate,
+        num_leaves=31,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        random_state=random_state,
+
+        # Start safely on Windows
+        n_jobs=1,
+        device_type="cpu",
+        verbosity=-1
+    )
+
     model.fit(X_train, y_train)
-    return model.predict(X_val)
+    predictions = model.predict(X_val)
+
+    del X_train, y_train, X_val
+    gc.collect()
+
+    return predictions
+
 
 
 def get_mlp_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", hidden_layer_sizes=(64, 32), max_iter=20, random_state=42):
