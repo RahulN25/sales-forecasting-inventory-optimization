@@ -425,4 +425,194 @@ def get_sarima_forecast(train_data, val_data, group_cols=("Store", "Dept"), orde
     return _get_statistical_forecast_base(train_data, val_data, _fit_predict_sarima, kwargs, group_cols, n_jobs)
 
 
+def get_lr_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales"):
+    """
+    Linear Regression Forecast.
+    """
+    from sklearn.linear_model import LinearRegression
+    from sklearn.preprocessing import StandardScaler
+    
+    scaler = StandardScaler()
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_val_scaled = scaler.transform(X_val)
+    
+    model = LinearRegression()
+    model.fit(X_train_scaled, y_train)
+    return model.predict(X_val_scaled)
+
+
+def get_rf_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", n_estimators=100, max_depth=15, random_state=42):
+    """
+    Random Forest Regressor Forecast.
+    """
+    from sklearn.ensemble import RandomForestRegressor
+    
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    model = RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, random_state=random_state, n_jobs=-1)
+    model.fit(X_train, y_train)
+    return model.predict(X_val)
+
+
+def get_knn_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", n_neighbors=5):
+    """
+    K-Nearest Neighbors Regressor Forecast.
+    """
+    from sklearn.neighbors import KNeighborsRegressor
+    from sklearn.preprocessing import StandardScaler
+    
+    scaler = StandardScaler()
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_val_scaled = scaler.transform(X_val)
+    
+    model = KNeighborsRegressor(n_neighbors=n_neighbors, weights='distance', n_jobs=-1)
+    model.fit(X_train_scaled, y_train)
+    return model.predict(X_val_scaled)
+
+
+def get_xgb_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", n_estimators=100, max_depth=6, learning_rate=0.1, random_state=42):
+    """
+    XGBoost Regressor Forecast.
+    """
+    from xgboost import XGBRegressor
+    
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    model = XGBRegressor(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate, random_state=random_state, n_jobs=-1)
+    model.fit(X_train, y_train)
+    return model.predict(X_val)
+
+
+def get_lgb_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", n_estimators=100, max_depth=6, learning_rate=0.1, random_state=42):
+    """
+    LightGBM Regressor Forecast.
+    """
+    from lightgbm import LGBMRegressor
+    
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    model = LGBMRegressor(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate, random_state=random_state, n_jobs=-1)
+    model.fit(X_train, y_train)
+    return model.predict(X_val)
+
+
+def get_mlp_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", hidden_layer_sizes=(64, 32), max_iter=20, random_state=42):
+    """
+    Multi-Layer Perceptron (MLP) Regressor Forecast.
+    """
+    from sklearn.neural_network import MLPRegressor
+    from sklearn.preprocessing import StandardScaler
+    
+    scaler = StandardScaler()
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_val_scaled = scaler.transform(X_val)
+    
+    model = MLPRegressor(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, random_state=random_state, batch_size=256, early_stopping=True)
+    model.fit(X_train_scaled, y_train)
+    return model.predict(X_val_scaled)
+
+
+def get_ann_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", epochs=10, batch_size=1024, lr=0.01):
+    """
+    Artificial Neural Network (ANN) PyTorch Regressor Forecast.
+    """
+    import torch
+    import torch.nn as nn
+    from torch.utils.data import TensorDataset, DataLoader
+    from sklearn.preprocessing import StandardScaler
+    
+    scaler = StandardScaler()
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_val_scaled = scaler.transform(X_val)
+    
+    # Simple feedforward ANN
+    class ANNRegressor(nn.Module):
+        def __init__(self, input_dim):
+            super().__init__()
+            self.net = nn.Sequential(
+                nn.Linear(input_dim, 64),
+                nn.ReLU(),
+                nn.Linear(64, 32),
+                nn.ReLU(),
+                nn.Linear(32, 1)
+            )
+        def forward(self, x):
+            return self.net(x).squeeze(-1)
+            
+    X_train_t = torch.tensor(X_train_scaled, dtype=torch.float32)
+    y_train_t = torch.tensor(y_train.values, dtype=torch.float32)
+    X_val_t = torch.tensor(X_val_scaled, dtype=torch.float32)
+    
+    train_loader = DataLoader(TensorDataset(X_train_t, y_train_t), batch_size=batch_size, shuffle=True)
+    
+    model = ANNRegressor(X_train_scaled.shape[1])
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    criterion = nn.MSELoss()
+    
+    torch.manual_seed(42)
+    model.train()
+    for epoch in range(epochs):
+        for bx, by in train_loader:
+            optimizer.zero_grad()
+            out = model(bx)
+            loss = criterion(out, by)
+            loss.backward()
+            optimizer.step()
+            
+    model.eval()
+    with torch.no_grad():
+        preds = model(X_val_t).numpy()
+    return preds
+
+
+def get_gbrt_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales", n_estimators=100, max_depth=4, random_state=42):
+    """
+    Gradient Boosted Regression Trees (GBRT) Forecast.
+    """
+    from sklearn.ensemble import GradientBoostingRegressor
+    
+    X_train = train_features[feature_cols]
+    y_train = train_features[target_col]
+    X_val = val_features[feature_cols]
+    
+    model = GradientBoostingRegressor(n_estimators=n_estimators, max_depth=max_depth, random_state=random_state)
+    model.fit(X_train, y_train)
+    return model.predict(X_val)
+
+
+def get_ml_ensemble_forecast(train_features, val_features, feature_cols, target_col="Weekly_Sales"):
+    """
+    Ensemble Regressor (Random Forest + XGBoost + LightGBM + MLP).
+    """
+    preds_rf = get_rf_forecast(train_features, val_features, feature_cols, target_col)
+    preds_xgb = get_xgb_forecast(train_features, val_features, feature_cols, target_col)
+    preds_lgb = get_lgb_forecast(train_features, val_features, feature_cols, target_col)
+    preds_mlp = get_mlp_forecast(train_features, val_features, feature_cols, target_col)
+    
+    return (preds_rf + preds_xgb + preds_lgb + preds_mlp) / 4.0
+
+
+
 
