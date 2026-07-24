@@ -1,3 +1,7 @@
+import os
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
+import lightgbm
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt, ExponentialSmoothing
