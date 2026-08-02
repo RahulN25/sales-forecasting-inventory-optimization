@@ -1,0 +1,7 @@
+Model,Week_Type,MAE
+Historical Mean,Non-Holiday,2389.451744601565
+Historical Mean,Holiday,2820.9613605427376
+Naïve Forecast,Non-Holiday,2332.909742153443
+Naïve Forecast,Holiday,2039.8613828956968
+Seasonal Naïve,Non-Holiday,1688.885804407866
+Seasonal Naïve,Holiday,1798.39909221598
