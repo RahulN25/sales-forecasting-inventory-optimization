@@ -1,0 +1,13 @@
+Measure,Value
+Forecast model,Optimized DL Ensemble
+Calibration weeks,4
+Inventory evaluation weeks,7
+Lead time assumption,1
+Holding-cost index,1.0
+Shortage-cost index,5.0
+Lowest-cost target service level,65.0%
+Realised fill rate,98.35%
+Stockout-free cycle rate,85.25%
+Average ending inventory,"1,309.82"
+Lost-sales exposure,"5,233,411.81"
+Total simulated cost index,"53,362,825.84 cost units"

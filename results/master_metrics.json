@@ -1,0 +1,218 @@
+[
+  {
+    "Model":"Optimized DL Ensemble",
+    "Family":"Deep Learning",
+    "WMAE ($)":1179.6090076827,
+    "MAE ($)":1149.4982337015,
+    "RMSE ($)":2461.6775584775,
+    "sMAPE (%)":24.4259320273,
+    "Runtime (s)":2895.266705513
+  },
+  {
+    "Model":"LSTM-MLP Hybrid",
+    "Family":"Deep Learning",
+    "WMAE ($)":1205.9598821514,
+    "MAE ($)":1188.7964270438,
+    "RMSE ($)":2510.0399452234,
+    "sMAPE (%)":23.5675320907,
+    "Runtime (s)":899.7776288986
+  },
+  {
+    "Model":"Residual Attention LSTM",
+    "Family":"Deep Learning",
+    "WMAE ($)":1229.25009801,
+    "MAE ($)":1179.2143642807,
+    "RMSE ($)":2523.6030960099,
+    "sMAPE (%)":25.7092966129,
+    "Runtime (s)":1500.7023360729
+  },
+  {
+    "Model":"LSTM",
+    "Family":"Deep Learning",
+    "WMAE ($)":1239.2777223466,
+    "MAE ($)":1217.42216814,
+    "RMSE ($)":2569.1696844137,
+    "sMAPE (%)":27.3904502539,
+    "Runtime (s)":494.7867405415
+  },
+  {
+    "Model":"BiLSTM with Attention",
+    "Family":"Deep Learning",
+    "WMAE ($)":1259.2199739386,
+    "MAE ($)":1205.7988423315,
+    "RMSE ($)":2498.0380681289,
+    "sMAPE (%)":23.1195462292,
+    "Runtime (s)":629.8230416775
+  },
+  {
+    "Model":"1D-CNN",
+    "Family":"Deep Learning",
+    "WMAE ($)":1268.0603462168,
+    "MAE ($)":1232.1878651229,
+    "RMSE ($)":2536.1229596024,
+    "sMAPE (%)":27.304646297,
+    "Runtime (s)":366.247718811
+  },
+  {
+    "Model":"Random Forest",
+    "Family":"Machine Learning",
+    "WMAE ($)":1292.5279833555,
+    "MAE ($)":1230.2980041896,
+    "RMSE ($)":2560.2794761067,
+    "sMAPE (%)":17.5930216118,
+    "Runtime (s)":115.5891401768
+  },
+  {
+    "Model":"LightGBM",
+    "Family":"Machine Learning",
+    "WMAE ($)":1304.3615404441,
+    "MAE ($)":1227.301402092,
+    "RMSE ($)":2672.4476526733,
+    "sMAPE (%)":17.64142708,
+    "Runtime (s)":17.8066616058
+  },
+  {
+    "Model":"XGBoost",
+    "Family":"Machine Learning",
+    "WMAE ($)":1357.4294362787,
+    "MAE ($)":1275.7477409903,
+    "RMSE ($)":2821.7741857014,
+    "sMAPE (%)":21.9100594635,
+    "Runtime (s)":2.9494595528
+  },
+  {
+    "Model":"Ensemble",
+    "Family":"Machine Learning",
+    "WMAE ($)":1419.1360539238,
+    "MAE ($)":1298.523990374,
+    "RMSE ($)":2629.2652259686,
+    "sMAPE (%)":27.0268915156,
+    "Runtime (s)":152.1428637505
+  },
+  {
+    "Model":"Holt-Winters",
+    "Family":"Statistical",
+    "WMAE ($)":1427.6854969895,
+    "MAE ($)":1422.4974730282,
+    "RMSE ($)":3130.4257454343,
+    "sMAPE (%)":23.7112545775,
+    "Runtime (s)":2006.3962557316
+  },
+  {
+    "Model":"GBRT",
+    "Family":"Machine Learning",
+    "WMAE ($)":1457.4211103931,
+    "MAE ($)":1359.6710310136,
+    "RMSE ($)":2753.7746379401,
+    "sMAPE (%)":24.4306890688,
+    "Runtime (s)":540.233140707
+  },
+  {
+    "Model":"SARIMA(1,1,0)x(0,1,1,52)",
+    "Family":"Statistical",
+    "WMAE ($)":1494.1881713447,
+    "MAE ($)":1495.9290694604,
+    "RMSE ($)":3189.1925290288,
+    "sMAPE (%)":24.4155386877,
+    "Runtime (s)":3435.5223181248
+  },
+  {
+    "Model":"TCN-Transformer Hybrid",
+    "Family":"Deep Learning",
+    "WMAE ($)":1680.9686107435,
+    "MAE ($)":1683.0223973668,
+    "RMSE ($)":3670.1780480837,
+    "sMAPE (%)":29.1168284352,
+    "Runtime (s)":564.7506906986
+  },
+  {
+    "Model":"Seasonal Naive",
+    "Family":"Statistical",
+    "WMAE ($)":1714.9025797103,
+    "MAE ($)":1689.9288874019,
+    "RMSE ($)":3638.7668397968,
+    "sMAPE (%)":23.3479465017,
+    "Runtime (s)":0.1558523178
+  },
+  {
+    "Model":"KNN",
+    "Family":"Machine Learning",
+    "WMAE ($)":1782.2256440085,
+    "MAE ($)":1731.9101204257,
+    "RMSE ($)":3200.6130292846,
+    "sMAPE (%)":31.0844569428,
+    "Runtime (s)":13.5904085636
+  },
+  {
+    "Model":"Linear Regression",
+    "Family":"Machine Learning",
+    "WMAE ($)":1830.5563195771,
+    "MAE ($)":1743.5756812623,
+    "RMSE ($)":3465.2245351631,
+    "sMAPE (%)":41.9691906339,
+    "Runtime (s)":1.6823136806
+  },
+  {
+    "Model":"Simple Exp Smoothing (SES)",
+    "Family":"Statistical",
+    "WMAE ($)":2143.1747087585,
+    "MAE ($)":2156.6272435075,
+    "RMSE ($)":4800.2151299344,
+    "sMAPE (%)":26.4100528891,
+    "Runtime (s)":2028.7231431007
+  },
+  {
+    "Model":"Holt's Linear Trend",
+    "Family":"Statistical",
+    "WMAE ($)":2155.9478495809,
+    "MAE ($)":2166.0463084359,
+    "RMSE ($)":5261.1232635117,
+    "sMAPE (%)":27.0086987167,
+    "Runtime (s)":1974.1719229221
+  },
+  {
+    "Model":"ARIMA(1,1,1)",
+    "Family":"Statistical",
+    "WMAE ($)":2210.6089989983,
+    "MAE ($)":2197.8612207298,
+    "RMSE ($)":4920.1710563277,
+    "sMAPE (%)":26.3334464076,
+    "Runtime (s)":2131.1456432343
+  },
+  {
+    "Model":"Naive",
+    "Family":"Baseline",
+    "WMAE ($)":2241.2761332852,
+    "MAE ($)":2308.4691315874,
+    "RMSE ($)":5080.2974692122,
+    "sMAPE (%)":28.253382276,
+    "Runtime (s)":0.1600260735
+  },
+  {
+    "Model":"ANN",
+    "Family":"Machine Learning",
+    "WMAE ($)":2460.0187168104,
+    "MAE ($)":2406.5440496008,
+    "RMSE ($)":3622.3497525681,
+    "sMAPE (%)":45.7697658545,
+    "Runtime (s)":61.0546855927
+  },
+  {
+    "Model":"Historical Mean",
+    "Family":"Baseline",
+    "WMAE ($)":2524.3809537948,
+    "MAE ($)":2425.440202293,
+    "RMSE ($)":4953.4673062026,
+    "sMAPE (%)":29.2017051783,
+    "Runtime (s)":0.0315577984
+  },
+  {
+    "Model":"MLP",
+    "Family":"Machine Learning",
+    "WMAE ($)":2592.1412270009,
+    "MAE ($)":2132.6407310771,
+    "RMSE ($)":3521.1768523321,
+    "sMAPE (%)":45.6029057285,
+    "Runtime (s)":30.6014561653
+  }
+]
