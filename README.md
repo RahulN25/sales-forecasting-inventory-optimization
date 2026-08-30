@@ -9,10 +9,10 @@
 
 Effective demand forecasting and inventory control are central to modern retail supply chain management. Under-forecasting results in stockouts, lost revenue, and reduced customer loyalty, while over-forecasting incurs high holding costs, inventory obsolescence, and working capital lockup.
 
-This repository provides an enterprise-grade, end-to-end framework that integrates **23 time-series forecasting models** across **4 distinct model paradigms** (Baseline, Statistical, Machine Learning, and Deep Learning) with **stochastic inventory optimization models** (Reorder Point, Safety Stock, $(s, S)$ Continuous Review Policies, and Cost Sensitivity Analysis).
+This repository provides an enterprise-grade, end-to-end framework that integrates **24 time-series forecasting models** across **4 distinct model paradigms** (Baseline, Statistical, Machine Learning, and Deep Learning) with **stochastic inventory optimization models** (Reorder Point, Safety Stock, $(s, S)$ Continuous Review Policies, and Cost Sensitivity Analysis).
 
 ### Key Project Achievements
-* **Comprehensive Benchmark Zoo**: Implemented and benchmarked 23 distinct forecasting architectures on Walmart's multi-series retail dataset comprising **3,084 Store-Department time series** across **143 weekly observations**.
+* **Comprehensive Benchmark Zoo**: Implemented and benchmarked 24 distinct forecasting architectures on Walmart's multi-series retail dataset comprising **3,084 Store-Department time series** across **143 weekly observations**.
 * **Top Forecasting Performance**: The **Optimized Deep Learning Ensemble** achieved the lowest overall Weighted Mean Absolute Error (**WMAE of $1,179.61**), outperforming the Seasonal Naïve baseline by **31.2%**.
 * **Machine Learning & Efficiency Leaders**: **Random Forest** (**WMAE $1,292.53**) emerged as the top tree-based model, while **LightGBM** (**WMAE $1,304.36**, runtime: 17.8s) and **XGBoost** (**WMAE $1,357.43**, runtime: 2.95s) delivered extreme operational efficiency.
 * **Statistical Standout**: **Holt-Winters (Triple Exponential Smoothing)** dominated the statistical family (**WMAE $1,427.69**), delivering a **17.1% error reduction** over Seasonal Naïve through damped trend and annual weekly seasonality ($m=52$).
@@ -61,7 +61,7 @@ sales-forecasting-inventory-optimization/
 │   ├── 10_model_comparison.ipynb
 │   └── 11_additional_models.ipynb
 ├── results/                            # Benchmark Leaderboards & Predictions
-│   ├── master_metrics.json             # Master Benchmark Metrics for all 23 Models
+│   ├── master_metrics.json             # Master Benchmark Metrics for all 24 Models
 │   ├── master_predictions.csv          # Consolidated Predictions Matrix
 │   ├── model_comparison.md             # In-depth Model Evaluation Log
 │   ├── experiment_log.md               # Tracking Log & Sub-experiment Reports
@@ -110,11 +110,11 @@ To enable machine learning and deep learning models to capture multi-scale tempo
 
 ## 🤖 Model Zoo & Methodology
 
-We implemented and evaluated **23 forecasting models** categorized into 4 core families:
+We implemented and evaluated **24 forecasting models** categorized into 4 core families:
 
 ```
                           ┌────────────────────────────────────────────────┐
-                          │   Sales Forecasting Model Zoo (23 Models)      │
+                          │   Sales Forecasting Model Zoo (24 Models)      │
                           └───────────────────────┬────────────────────────┘
                                                   │
          ┌──────────────────┬─────────────────────┴─────────────────────┬──────────────────┐
@@ -148,7 +148,7 @@ $$\text{WMAE} = \frac{\sum_{i=1}^{n} w_i |y_i - \hat{y}_i|}{\sum_{i=1}^{n} w_i} 
 
 ## 🏆 Empirical Results & Benchmark Leaderboard
 
-The complete benchmark evaluation of all **23 forecasting models** across the full validation dataset of **3,084 Store-Department series** is detailed below, ordered from best to worst WMAE performance:
+The complete benchmark evaluation of all **24 forecasting models** across the full validation dataset of **3,084 Store-Department series** is detailed below, ordered from best to worst WMAE performance:
 
 | Rank | Model Name | Model Family | WMAE ($) ⬇️ | MAE ($) | RMSE ($) | sMAPE (%) | Execution Time (s) |
 | :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -331,7 +331,7 @@ If you use this repository or its benchmark results in your research or project 
 ```bibtex
 @misc{nagpure2026salesforecasting,
   author = {Rahul Nagpure},
-  title = {Sales Forecasting and Inventory Optimization System: An End-to-End Benchmark of 23 Time-Series Models and Stochastic Inventory Control},
+  title = {Sales Forecasting and Inventory Optimization System: An End-to-End Benchmark of 24 Time-Series Models and Stochastic Inventory Control},
   year = {2026},
   publisher = {GitHub},
   journal = {CT5108 Data Analytics Project, University of Galway},
